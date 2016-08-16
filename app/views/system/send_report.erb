@@ -1,0 +1,145 @@
+<%= render :partial => "/main/navbar" %>
+<input type="hidden" id="check_user" value="<%= @flag %>">
+
+<body style="background-color:#e3e5e4">
+    <div class = "container">
+        <div class="col-md-12" style="height:auto; text-align:center; border-top: 2px solid #b7b7b7; border-bottom: 1px solid #b7b7b7; background-color: #e3e5e4; margin:110px 0px 0px 0px;"> 
+            <div style="padding: 27px 0px 30px 0px;">
+              <span style="font-weight: 800; color:#727272; font-size: 120%;">신고 |</span> 
+              <span style="font-weight: 500;color:#a6a6a6; font-size: 120%;">&nbsp;올바르지 못한 강의평가를 제보해주세요</span>
+            </div>
+        </div>
+
+        <%= render :partial =>"main/aside4"%> 
+
+        <% if user_signed_in? %>
+        
+            <section class ="form-style-10" style="margin-top:20px; margin-bottom:25px; padding-left:0px; padding-right:0px">
+                <form action="/system/send_report_mail" method="POST" enctype="multipart/form-data" name="write_contact">
+                    <div class="section" style="padding-left: 40px; color: #000; font-size: 150%;margin-top: -12px;margin-bottom: 15px;">Report</div> 
+                    <div class="inner-wrap" style="border-radius:0px;">    
+                        <label>[<%=@this_evaluation%>번 강의평가 내용]&nbsp;
+                            <%= Evaluation.find(@this_evaluation).lecture_name %>&nbsp;-&nbsp;<%= Evaluation.find(@this_evaluation).lecture_prof %>&nbsp;&nbsp;|&nbsp;&nbsp;작성자:<%= Evaluation.find(@this_evaluation).evaluation_writer %>
+                            <div name="r_content1">
+                                <br>
+                                <p><%= Evaluation.find(@this_evaluation).content %>
+                            </div>
+                        </label>
+                        <br>
+                        <label>제목 <input type="text" name="r_title" id="r_title" placeholder="제목을 입력해 주세요." value="[신고] <%=@this_evaluation%>번 강의평가를 신고합니다." required/></label>
+                        <label>신고내용 <textarea rows="15" name="r_content" id="r_content" style="color:black" placeholder="신고 내용을 입력해 주세요." required></textarea></label>  
+                        <input type="hidden" name="r_id" value="<%=@this_evaluation%>">
+                    </div>
+                    <div class="button-section" style="height: 50px;">
+                        <div style = "text-align:center; margin-top:15px; padding-top: 11px;"><input type="submit" id="send_report" value="작성완료">&nbsp;&nbsp;<input type="button" id="move_to_main" value="메인으로"></div>
+                    </div>
+                </form>
+            </section>
+        <% end %>
+    
+        <input type="hidden" id="check_authentication" value="<%= current_user.authentication %>">
+        <input type="hidden" id="check_num_myeval" value="<%= current_user.num_myeval %>">
+        
+
+        <% if user_signed_in? %>
+            <section class ="form-style-10" style="margin-top:0px; padding-left:0px; padding-right:0px"> 
+                <div class="section" style="padding-left: 40px; color: #000; font-size: 150%;margin-top: -12px;margin-bottom: 15px;">나의 신고/문의 내역</div> 
+                <div class="inner-wrap" style="border-radius:0px;">                      
+                    <div class="row" style="border-bottom: 1px #b5b5b5 solid; text-align: center; padding: 0px 10px 15px 0px;">        
+                        <div class="col-md-3 col-xs-3 col-sm-12" style="padding-left: 0px; font-weight: 800; color: #299676;">번호</div>
+                        <div class="col-md-6 col-xs-6 col-sm-12 " style=" word-break: break-all;  text-align: left; padding-left: 0px; word-break: break-all;  font-weight: 800; color: #299676;">제목</div>
+                        <div class="col-md-3 col-xs-3 col-sm-12" style="font-weight: 800; color: #299676;">신고/문의 날짜</div>
+                    </div>
+                    <br>
+                    <%= @check %>
+                    
+                    <% if( @user_report_list.count == 0 ) %> 
+                        <div class="row" style="padding: 0px 10px 0px 0px; text-align: center;">  
+                            <br>
+                            <p>나의 신고/문의 내역이 비었습니다</p>
+                            <br>
+                            <hr style="margin: 15px;">
+                        </div>
+                    <% else %>
+                        <% @count = @user_report_list.count %>
+                        <% @user_report_list.reverse.each do |x|%>
+                            <div class="row" id="notice_onclick" style="padding: 0px 10px 0px 0px; margin-top:0px; text-align: center;" onclick="location.href='/system/send_report_detail/<%=x.id%>'">  
+                                <div class="col-md-3 col-xs-3 col-sm-12" style="padding-left: 0px; font-weight: 500; color: #303130;"><%= @count %></div>
+                                <div class="col-md-6 col-xs-6 col-sm-12" style="text-align: left;  padding-left: 0px; font-weight: 500; color: #303130;"><%=x.report_title%></div>
+                                <div class="col-md-3 col-xs-3 col-sm-12" style="font-weight: 500; color: #303130;"><%=x.created_at.in_time_zone("Seoul").strftime("%Y/%m/%d")%></div><br>
+                                <hr style="margin: 15px; width: 97%;">
+                            </div>
+                            <% @count = @count - 1 %>
+                        <% end %>
+                    <% end %>
+                    
+                </div>
+            </section>
+        <% end %>
+    </div>
+     
+</body>        
+
+<script>
+    $('#check_search').click(function(){
+        var value1 = $( '#check_authentication' ).val();
+        var value2 = $( '#check_num_myeval' ).val(); 
+        
+        var check_num1  = parseInt( value1 );
+        var check_num2 = parseInt( value2 );  
+    
+        if( check_num1 == 0 || check_num1 == 1 ){
+            alert( "성균인 인증을 해주세요." );
+            return false;
+        }
+        else if( check_num2 < 3 ){
+            alert( "강의평가를 3개 이상 작성해주세요." );
+            return false;
+        }
+        else{
+            location.href = "/system/finding_test_result";
+            return true
+        }
+    });
+    
+    $(function(){
+        var check_fail = $( '#check_user' ).val();
+        
+        if( check_fail == "1" ){
+            alert( "성균인 인증을 해주세요" );
+            location.replace('/main/main');
+        }
+        else if( check_fail == "2"){
+            alert( "강의평가를 3개 이상 작성해주세요" );
+            location.replace('/main/main');
+        }
+        else if( check_fail == "3"){
+            alert( "이미 신고 접수가 완료된 강의입니다" );
+            location.replace('/main/main');
+        }
+    });
+
+  
+    $('#send_report').click(function(){
+        var value1 = $( '#r_title' ).val();
+        var value2 = $( '#r_content' ).val();
+      
+        if ( value1 == "" ){ 
+            alert('제목을 입력해주세요.');
+            return false;
+        }
+        else if ( value2 == "" ){ 
+            alert('신고내용을 입력해주세요.');
+            return false;
+        }
+        else{
+            alert( '깨끗한 SKK:LAB을 위한 제보 감사합니다.' );
+            location.href = "/system/send_contact_mail";  
+        }
+    });
+    
+    $('#move_to_main').click(function(){
+      location.href = "/main/main"
+    });
+    
+</script>

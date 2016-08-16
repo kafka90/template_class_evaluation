@@ -1,0 +1,8 @@
+<form action = "/notice/notice_delete_process/<%=@this_post.id%>" method ="POST">
+        <input type = "password" name = "delete_password"placeholder="&nbsp;비밀번호를 입력해주세요." required/>
+            <a href="/notice/notice_detail/<%=@this_post.id%>">
+                <input type="button" value="돌아가기">                 
+            </a>
+        <input  type="submit" name="Sign Up" value="삭제하기"/>
+
+</form>

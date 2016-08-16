@@ -1,0 +1,303 @@
+<%= render :partial => "/main/navbar" %>
+
+<body style="background-color:#e3e5e4">
+ <div class="container">
+<div class="col-md-12" style="height:auto; text-align:center; border-top: 2px solid #b7b7b7; border-bottom: 1px solid #b7b7b7; background-color: #e3e5e4; margin:110px 0px 0px 0px;"> 
+    <div style="padding: 27px 0px 30px 0px;">
+      <span style="font-weight: 800; color:#727272; font-size: 120%;">나의 강의평가 수정 |</span> 
+      <span style="font-weight: 500;color:#a6a6a6; font-size: 120%;">&nbsp;"<%= @this_evaluation.lecture_name %>" 에 대한 평가를 수정합니다</span>
+    </div>
+</div>
+    <%= render :partial =>"main/aside2"%> 
+     <section class="form-style-10" style="margin-top:20px; padding-left:0px; padding-right:0px;">
+        <form action="/system/myinfo_eval_modify_process/<%=@this_id%>" method="POST" enctype="multipart/form-data" name="write_form">
+            <div class="section" style="padding-left: 40px; color: #000; font-size: 150%; margin-top: -12px;margin-bottom: 15px;">강의평가 수정</div>
+            
+            <div class="inner-wrap" style="border-radius:0px">
+                <label>강의명<div name="lecture_name"><h5>&nbsp;&nbsp;<%= @this_evaluation.lecture_name %> - <%= @this_evaluation.lecture_prof %>&nbsp;교수님</h5></div></label>
+                <label>수강학기<div name="lecture_semester"><h5>&nbsp;&nbsp;<%= @this_evaluation.lecture_semester %></h5></div></label>
+                <br>
+                
+                <div class="evaluation-form" style="background-color:#e3e5e4;">
+                <br>    
+                
+                    <div class="row" style="margin-left:10px; background-color:#e3e5e4;">
+                        <div class="col-md-6"> 
+                            <span>총점 ( Previous score : <%=@this_evaluation.score_overall / 2%> )</span><br>   
+                            <fieldset class="rating">
+                                <input type="radio" id="star5" class="star"name="score_overall" value="10" /><label class = "full" for="star5" title="Awesome - 5 stars"></label>
+                                <input type="radio" id="star4"class="star" name="score_overall" value="8" /><label class = "full" for="star4" title="Pretty good - 4 stars"></label>                             
+                                <input type="radio" id="star3"class="star" name="score_overall" value="6" /><label class = "full" for="star3" title="Meh - 3 stars"></label>                                
+                                <input type="radio" id="star2" class="star"name="score_overall" value="4" /><label class = "full" for="star2" title="Kinda bad - 2 stars"></label>                             
+                                <input type="radio" id="star1"class="star" name="score_overall" value="2" /><label class = "full" for="star1" title="Sucks big time - 1 star"></label>                                
+                            </fieldset>
+                        </div>
+                        <div class="col-md-6">
+                            <span>성취감 총점 ( Previous score : <%=@this_evaluation.score_achievement%> )</span>
+                            <div class="box box-blue box-example-square" >
+                            	<div class="box-body">
+                            		<div class="br-wrapper br-theme-bars-square4">
+                            			<select id="example-square4" name="score_achievement" style="display: none;" required>
+                            					<option value=""></option>
+                            					<option value="1">배운게..음..</option>
+                            					<option value="2">조금 적어요</option>
+                            					<option value="3">보통이에요</option>
+                            					<option value="4">조금 많아요</option>
+                            					<option value="5">많이 배웠어요!</option>
+                            			</select>
+                                	</div>
+                            	</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <br>
+                    
+                    <div class="row" style="margin-left:10px; background-color:#e3e5e4;">
+                        <div class="col-md-6">          
+                            <span>강의 난이도 ( Previous score : <%=@this_evaluation.score_difficulty%> )</span>
+                            <div class="box box-blue box-example-square">
+                            	<div class="box-body">
+                            		<div class="br-wrapper br-theme-bars-square">
+                            			<select id="example-square1" name="score_difficulty" style="display: none;" required>
+                            					<option value=""></option>
+                            					<option value="1">아주 쉬워요</option>
+                            					<option value="2">부담없어요</option>
+                            					<option value="3">보통이에요</option>
+                            					<option value="4">어려워요</option>
+                            					<option value="5">아주 어려워요</option>
+                            			</select>
+                                	</div>
+                            	</div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <span>학점 만족도 ( Previous score : <%=@this_evaluation.score_grade%> )</span>
+                            <div class="box box-blue box-example-square">
+                            	<div class="box-body">
+                            		<div class="br-wrapper br-theme-bars-square2">	
+                            			<select id="example-square2" name="score_grade" style="display: none;" required>
+                            					<option value=""></option>
+                            					<option value="1">얄짤 없는 F!!</option>
+                            					<option value="2">헉 C뿌리기</option>
+                            					<option value="3">으앗 B폭격기</option>
+                            					<option value="4">잘 주는편</option>
+                            					<option value="5">아주 잘 주는편^^</option>
+                            			</select>
+                                	</div>
+                            	</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <br><br><br>
+                    
+                    <div class="row" style="margin-left:10px; background-color:#e3e5e4;">
+                        <div class="col-md-6">    
+                            <span>학습량 ( Previous score : <%=@this_evaluation.score_study%> )</span>
+                            <div class="box box-blue box-example-square">
+                            	<div class="box-body">
+                            		<div class="br-wrapper br-theme-bars-square3">
+                            			<select id="example-square3" name="score_study" style="display: none;" required>
+                            					<option value=""></option>
+                            					<option value="1">아주 널널해요</option>
+                            					<option value="2">조금 널널해요</option>
+                            					<option value="3">보통이에요</option>
+                            					<option value="4">조금 많아요</option>
+                            					<option value="5">정말 많아요</option>
+                            			</select>
+                                	</div>
+                            	</div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <span>출석체크 ( Previous score : <%=@this_evaluation.score_attendance%> )</span>
+                            <div class="box box-blue box-example-square">
+                            	<div class="box-body">
+                            		<div class="br-wrapper br-theme-bars-square5">
+                            			<select id="example-square5" name="score_attendance" style="display: none;" required>
+                            					<option value=""></option>
+                            					<option value="1">거의 안해요</option>
+                            					<option value="2">아주 가끔 해요</option>
+                            					<option value="3">조금 해요</option>
+                            					<option value="4">자주 해요</option>
+                            					<option value="5">항상 해요</option>
+                            			</select>
+                                	</div>
+                            	</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <br><br>
+                    
+                </div>
+        
+                <br><br>
+                <span>강의평</span><br>
+                <textarea id="textarea" rows="6" cols="75" name="content" minlength="100" maxlength="840" style="color:black" required><%=@this_evaluation.content%></textarea>
+                <div id="textarea_feedback" style="padding-left: 73%; padding-top: 10px;"></div>
+            </div>
+            
+            <div style = "text-align:center; margin-top:30px;"> 
+                <input type="submit" id="evaluation_submit" value="수정완료">
+                <input type="button" id="move_to_main" value="메인으로">
+            </div>
+        </form>
+    </section>
+</div>
+<input type="hidden" id="check_authentication" value="<%= current_user.authentication %>">
+<input type="hidden" id="check_num_myeval" value="<%= current_user.num_myeval %>">
+
+<script>
+  $(function() {
+   new app2.Subjects;
+   new app.Subjects;
+
+  });   
+</script>
+
+</body>
+
+<script type="text/javascript">
+
+   $(function() {
+      $('#example-square1').barrating({
+        theme: 'bars-square'
+      });
+   });
+   
+   $(function() {
+      $('#example-square2').barrating({
+        theme: 'bars-square'
+      });
+   });
+   
+   $(function() {
+      $('#example-square3').barrating({
+        theme: 'bars-square'
+      });
+   });
+   
+   $(function() {
+      $('#example-square4').barrating({
+        theme: 'bars-square'
+      });
+   });
+   
+   $(function() {
+      $('#example-square5').barrating({
+        theme: 'bars-square'
+      });
+   });
+   
+   /* 
+   $(document).ready(function() {
+    var text_max = 30;
+    $('#textarea_feedback').html(text_max + ' minimum characters remaining');
+
+    $('#textarea').keyup(function() {
+        var text_length = $('#textarea').val().length;
+        var text_remaining = text_max - text_length;
+
+        $('#textarea_feedback').html(text_remaining + ' minimum characters remaining');
+    });
+   */
+
+   $(document).ready(function() {
+    var text_minimum = 100;
+    var text_init = 0;
+    
+        $('#textarea_feedback').html('( ' + text_init + ' / ' + + text_minimum + '자 이상 입력해주세요)');
+
+        $('#textarea').keyup(function() {
+            var text_length = $('#textarea').val().length;
+    
+            $('#textarea_feedback').html('( ' + text_length + ' / ' + text_minimum + '자 이상 입력해주세요)');
+        });
+    });
+    
+   $('#evaluation_submit').click(function(){
+        var value0 = $( '#subject_id' ).val();
+        var value5 = $( '#example-square1').val();
+        var value6 = $( '#example-square2').val();
+        var value7 = $( '#example-square3').val();
+        var value8 = $( '#example-square4').val();
+        var value9 = $( '#example-square5').val();
+        var text_length = $('#textarea').val().length;
+        var check_num0 = parseInt( value0 );
+        if (check_num0 == 0) {
+            alert( "강의명을 제대로 입력해주세요" );
+            return false;
+        }
+        else if ($('input[type=radio]:checked').length <= 0) {
+            alert("총점을 입력해주세요")
+            return false;
+        }
+        else if (value5 == "") {
+            alert("강의 난이도를 선택해주세요");
+            return false;
+        }
+        else if (value6 == "") {
+            alert("학점 만족도를 선택해주세요");
+            return false;
+        }
+        else if (value7 == "") {
+            alert("학습량을 선택해주세요");
+            return false;
+        }
+        else if (value8 == "") {
+            alert("성취감을 선택해주세요");
+            return false;
+        }
+        else if (value9 == "") {
+            alert("출석체크를 선택해주세요");
+            return false;
+        }
+        
+        else if (text_length <= 99) {
+            alert("강의평가를 마저 작성해주세요");
+            return false;
+        }
+        
+        else{
+            return true;
+        }
+    });
+    
+          
+    $('#check_search').click(function(){
+        var value1 = $( '#check_authentication' ).val();
+        var value2 = $( '#check_num_myeval' ).val(); 
+        
+        var check_num1  = parseInt( value1 );
+        var check_num2 = parseInt( value2 );  
+    
+        if( check_num1 == 0 || check_num1 == 1 ){
+            alert( "성균인 인증을 해주세요" );
+            return false;
+        }
+        else if( check_num2 < 3 ){
+            alert( "강의평가를 3개 이상 작성해주세요" );
+            return false;
+        }
+        else{
+            location.href = "/system/finding_test_result";
+            return true;
+        }
+    });
+    
+    $('#move_to_mypage').click(function(){
+        location.href = "/system/myinfo_eval"
+    });
+  
+    $('#move_to_evalutation').click(function(){
+        location.href = "/system/lecture_evaluate"
+    });
+    
+    $('#move_to_main').click(function(){
+        location.href = "/main/main"
+    });
+</script>
+

@@ -1,0 +1,174 @@
+.subjects2-search input {
+  width: 100%;
+  font-size: 1em;
+  padding: .5em 1.3em;
+  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: 2em;
+  font-family: hangang;
+  color: #ddd;
+}
+
+input::-webkit-input-placeholder {
+text-align: left;
+color: #ddd;
+}
+
+.subjects2-search input-placeholder {
+  color:#ddd;
+}
+
+#check_search { 
+  padding: .5em 1.3em;
+  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: 40em;
+  font-family: hangang;
+  color: #ddd;
+  margin-bottom: 1px;
+  outline: none;
+}
+    
+.subjects2-search input:focus {
+  border-color: #A5CEF5;
+  outline: none;
+}
+
+.subjects2-search .results .ui-widget-content {
+  background: #fff;
+  font-size: 1.2em;
+ /* padding: .5em 0;*/
+  border-color: #ddd;
+  box-shadow: 0 .1em .2em rgba(187, 187, 187, 0.64);
+  line-height: 1.2;
+  max-height: 20em;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.subjects2-search .results .ui-menu-item {
+  font-family: hangang;
+  padding: .9em .9em .0em .0em;
+  position: relative;
+  border: 0;
+  border-left: 5px solid transparent;
+  position: relative;
+  height: 3em;
+}
+.subjects2-search .results .ui-state-focus {
+  background: #fff;
+  border-left-color: #08c;
+  font-weight: 300;
+  color: #08c;
+}
+
+
+
+.subjects2-search .results .ui-menu-item .name {
+  
+  color: #555;
+}
+
+.subjects2-search .results .ui-menu-item .prof {
+ 
+  font-size: .8em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-top: .6em;
+  letter-spacing: 1px;
+}
+
+.subjects2-search .results .ui-menu-item .division {
+  
+  font-size: .8em;
+  color: #aaa;
+  margin-top: .5em;
+}
+
+.subjects2-search .results .ui-state-focus .division,
+.subjects2-search .results .ui-state-focus .prof,
+.subjects2-search .results .ui-state-focus .name {
+  color: #08c;
+}
+
+
+/* 밑에는 평가창 */
+
+.subjects2-search2 input {
+  width: 100%;
+  font-size: 1em;
+  padding: .5em 1.3em;
+  background: transparent;
+  border: 1px solid #ddd;
+  border-radius: 2em;
+  font-family: hangang;
+  color: #595959;
+}
+input::-webkit-input-placeholder {
+text-align: left;
+color: #ddd;
+}
+.subjects2-search2 input-placeholder {
+  color:#ddd;
+}    
+.subjects2-search2 input:focus {
+  border-color: #A5CEF5;
+  outline: none;
+}
+
+.subjects2-search2 .results .ui-widget-content {
+  background: #fff;
+  font-size: 1.2em;
+ /* padding: .5em 0;*/
+  border-color: #ddd;
+  box-shadow: 0 .1em .2em rgba(187, 187, 187, 0.64);
+  line-height: 1.2;
+  max-height: 20em;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.subjects2-search2 .results .ui-menu-item {
+  font-family: hangang;
+  padding: .9em .9em .0em .0em;
+  position: relative;
+  border: 0;
+  border-left: 5px solid transparent;
+  position: relative;
+  height: 3em;
+}
+.subjects2-search2 .results .ui-state-focus {
+  background: #fff;
+  border-left-color: #08c;
+  font-weight: 300;
+  color: #08c;
+}
+
+
+
+.subjects2-search2 .results .ui-menu-item .name {
+  
+  color: #555;
+}
+
+.subjects2-search2 .results .ui-menu-item .prof {
+ 
+  font-size: .8em;
+  text-transform: uppercase;
+  color: #aaa;
+  margin-top: .6em;
+  letter-spacing: 1px;
+}
+
+.subjects2-search2 .results .ui-menu-item .division {
+  
+  font-size: .8em;
+  color: #aaa;
+  margin-top: .5em;
+}
+
+.subjects2-search2 .results .ui-state-focus .division,
+.subjects2-search2 .results .ui-state-focus .prof,
+.subjects2-search2 .results .ui-state-focus .name {
+  color: #08c;
+}

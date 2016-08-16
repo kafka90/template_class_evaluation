@@ -1,0 +1,43 @@
+<%= render :partial => "/main/navbar" %>
+<!--내브바끝 / 바디시작-->
+<body style="background-color:#242622">
+
+<div class="col-md-12" style="height:auto; text-align:center; border-top: 2px solid #b7b7b7; border-bottom: 1px solid #b7b7b7; background-color: #D1E1C4; margin:100px 0px 0px 0px;"> 
+    <div style="padding: 27px 0px 30px 0px;">
+      <span style="font-weight: 800; color:#727272; font-size: 120%;">비밀번호변경 </span> 
+    </div>
+</div>
+<!--컨테이너시작-->
+<div class="container">
+
+  <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+    <%= devise_error_messages! %>
+    <%= f.hidden_field :reset_password_token %>
+
+  <div class="form-style-10" style="margin-left:14%;">
+    <div class="inner-wrap">  
+
+      <div class="field">
+        <%= f.label :password, "새로운 비밀번호" %>
+        <% if @minimum_password_length %>
+          <em>(<%= @minimum_password_length %> characters minimum)</em><br />
+        <% end %>
+        <%= f.password_field :password, autofocus: true, autocomplete: "off" %>
+      </div>
+      <br><br>
+      <div class="field">
+        <%= f.label :password_confirmation, "비밀번호 확인" %>
+        <%= f.password_field :password_confirmation, autocomplete: "off" %>
+      </div>
+      <br><br>
+      <p>비밀번호를 변경하시려면 새로운 비밀번호를 입력 후, 변경 버튼을 눌러주세요<p>
+    </div>
+    <div class="actions">
+      <center><%= f.submit "변경" %></center>
+    </div>
+  <% end %>
+
+  <% render "devise/shared/links" %>
+  </div>
+</div>
+</body>>

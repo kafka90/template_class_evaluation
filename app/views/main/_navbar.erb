@@ -1,0 +1,66 @@
+<nav class="navbar navbar-default navbar-fixed-top" style = "height: 90px; background-color: #242622">
+  <div class="container" style="width:93%; min-width: 980px;padding-left: 0px !important;">
+    <!-- Brand and toggle get grouped for better mobile display -->
+     <div class="navbar-header">
+      <a  class="navbar-brand page-scroll" href="/main/main" style="padding-left: 5px;">
+        <image id="top_logo" src="/image/logo/skklab2.png" width="200px" style="height:60px;">
+      </a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" style="padding-left:30%;">
+       <% if user_signed_in? %>
+          <% if current_user.authentication == 2 or current_user.authentication == 3 %> 
+      
+            <form action="/system/finding_test_result" name="form2" class="navbar-form navbar-nav nav" role="search" style="margin:auto">
+                <div class="subjects2-search">
+                    <input type="text" id="subjects2-search-txt" name="searching" autofocus style="margin:27px 5px 0px 0px; width:280px;" placeholder="강의명 또는 교수명으로 검색">
+                    <button class="btn tf-btn btn-default" id="check_search"> 검색 </button>
+                    <div class="results" id="subjects2-search-results" ></div>
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+              <li style="padding-top: 32px;"><span style = "color: #e1e1e1"><%= current_user.name %> 님 환영합니다&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+              <li style="padding: 32px 14px 0px 0px; color: #e1e1e1" id="move_notice"><p>공지게시판</p></li>
+              <li style="padding: 32px 12px 0px 14px; color: #e1e1e1" id="move_to_contact"><p>Contact</p></li>
+              <li style="padding: 32px 12px 0px 14px; color: #e1e1e1" id="move_to_logout"><p>로그아웃</p></li>
+            </ul>
+          <% else %>
+            
+           <form action="/system/finding_test_result" name="form2" class="navbar-form navbar-nav nav" role="search" style="margin:auto">
+                <div class="subjects2-search">
+                    <input type="text" id="subjects2-search-txt" name="searching" autofocus style="margin:27px 5px 0px 0px; width:280px;" placeholder="강의명 또는 교수명으로 검색">
+                    <button class="btn tf-btn btn-default" id="check_search"> 검색 </button>
+                    <div class="results" id="subjects2-search-results" ></div>
+                </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+              <li style="padding-top: 34px;"><span style = "color: #e1e1e1"><%= current_user.name %> 님 환영합니다&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></li>
+              <li style="padding: 34px 14px 0px 0px; color: #e1e1e1" id="move_notice"><p>공지게시판</p></li>
+              <li style="padding: 33px 12px 0px 14px; color: #e1e1e1" id="move_to_contact"><p>Contact</p></li>                        
+              <li style="padding: 33px 12px 0px 14px; color: #e1e1e1" id="move_to_logout"><p>로그아웃</p></li>
+            </ul>
+          <% end %>
+      <% end %>
+            
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<script>
+$('#top_logo').click(function(){
+    location.href = "/main/main";
+});
+
+$('#move_notice').click(function(){
+    location.href = "/notice/notice_board";
+});
+
+$('#move_to_contact').click(function(){
+    location.href = "/system/contact";
+});
+
+$('#move_to_logout').click(function(){
+    location.href = "/users/sign_out";
+});
+
+</script>

@@ -1,0 +1,24 @@
+
+
+<div id="bar1" style="width:100px; height:100px;"></div>
+
+<script> 
+      var circle = new ProgressBar.Circle('#bar1', {
+        color: '#FCB03C',
+        strokeWidth: 6,
+        trailWidth: 6,
+        duration: 1500,
+
+        step: function(state, bar) {
+            bar.setText((bar.value() * 5).toFixed(1));
+            target = bar.value();
+            if ((target * 5).toFixed(1) == 2.3 ){
+                circle.stop();
+            }
+        }
+      });
+      
+      circle.animate(1, function() {  //이건 건들면 안돼
+           circle.animate(0);
+      });
+</script>

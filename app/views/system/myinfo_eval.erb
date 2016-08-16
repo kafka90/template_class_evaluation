@@ -1,0 +1,262 @@
+<%= render :partial => "/main/navbar" %>
+<head>
+  <script src='//uchat.co.kr/uchat.php' charset='UTF-8'></script>
+</head>
+
+<body style="background-color:#e3e5e4">
+
+<div class="container">
+    <div class="col-md-12" style="height:auto; text-align:center; border-top: 2px solid #b7b7b7; border-bottom: 1px solid #b7b7b7; background-color: #e3e5e4; margin:110px 0px 0px 0px;"> 
+        <div style="padding: 27px 0px 30px 0px;">
+          <span style="font-weight: 800; color:#727272; font-size: 120%;"><%= current_user.name %> 님의 강의평가 기록 |</span> 
+          <span style="font-weight: 500;color:#a6a6a6; font-size: 120%;">&nbsp;총 <%= current_user.num_myeval %>개의 결과</span>
+        </div>
+    </div>
+    
+    <section_space style="height:20px;">&nbsp;&nbsp;</section_space>
+    
+    <%= render :partial=>"main/aside2"%> 
+
+    
+    <% if ( current_user.num_myeval == 0 ) %>
+        <section style="margin-top:10px; height:300px;">
+            <br><br><br><br><br>
+            <center><h2>아직 평가한 강의가 없습니다</h2></center>
+        </section>
+    <% else %>
+        <% (current_user.num_myeval - 1).downto(0) do |x| %>    
+            <% temp = Evaluation.find( @store_myeval[x] ) %>
+            
+             <% if temp.content.length > 500 %>
+                <% content1 = temp.content[0..499] %>
+                <% content2 = temp.content[500..(temp.content.length - 1)] %>
+            <% else %>
+                <% flag = 1 %>
+            <% end %>
+            
+            <section_block style="position:relative">
+                <div class="name-inline">
+                    <div class="col-md-7" style="margin-top:21px;">
+                        <p>
+                            <% if temp.lecture_name.length > 12 %>
+                                <font color=#439677 size=4 style="cursor: pointer;"onclick="location.href='/system/lecture_info/<%=temp.subject_id%>'"><%= temp.lecture_name %></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <% else %>
+                                <font color=#439677 size=5 style="cursor: pointer;"onclick="location.href='/system/lecture_info/<%=temp.subject_id%>'"><%= temp.lecture_name %></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <% end %>
+                            <font color=#808080 size=3><%= temp.lecture_prof %> 교수님</font>&nbsp;&nbsp;
+                            <input type="button" value="수정" onclick="location.href='/system/myinfo_eval_modify/<%=temp.id%>'">
+                        </p>
+                    </div>
+                    <div class="col-md-5">
+                        <h5 style="text-align:right; margin-top:31px;"><%= temp.evaluation_writer %>&nbsp;&nbsp;<%= temp.lecture_semester %>&nbsp;수강</h5>
+                    </div>
+                </div>
+                
+                <br><br><hr class="style-four">
+                
+                <div class="row" style="margin-bottom:0px;">
+                    <div class="col-md-6" style="padding-right: 0px; padding-left: 20px;">
+                        <% if flag == 1 %>
+                            <p style="margin-top:8px; text-align:justify">&nbsp;&nbsp;<%= temp.content %></p> <br><br>
+                        <% else %>
+                            <p style="margin-top:8px; text-align:justify">&nbsp;&nbsp;<%= content1 %></p> <br>
+                        <% end %>
+                    </div>
+                    
+                    <div style=" position: absolute; bottom: 1%; margin-left:2%">
+                        <font color=#808080 size=2>( 이 강의평가는 <%= temp.created_at.in_time_zone("Seoul").strftime("%Y년 %m월 %d일 %H시 %M분")%>에 작성되었습니다. )</font>
+                        <img src="/image/siren.jpg" style="height:13px; margin-bottom:4px; margin-left:340px;">&nbsp;<font color=red size=2 id="send_report" onclick="location.href='/system/send_report/<%=temp.id%>'">신고하기</font>
+                        <br><br>      
+                    </div>  
+                   
+                    <div class="col-md-6">
+                        <section class="inner_section" style="padding-top:5px; margin-right: 0px; box-shadow: 0px 2px 2px 0px;">
+                            <div style=" word-break:break-all; height: auto; padding: 0px 10px 7px 10px; text-align:left;">    
+							    <div class="row" style="margin-bottom:0px;">
+							        <div class="col-md-2" style="margin-top: 18px;" ><label style="padding-top:2px;">총점</label></div>
+							        <div class="col-md-8" style="padding-left:0px; padding-right:0px; height:60px;">                                        
+                                        <fieldset class="rating2">
+                                            <% 10.downto(1) do |i| %>
+                                                  <% if (i == temp.score_overall and i %2 == 0) %>
+                                                    <label class ="full on"></label>
+                                                    <% elsif (i == temp.score_overall and i %2 != 0) %>
+                                                    <label class="half on"></label>
+                                                  <% elsif i % 2 == 0%>
+                                                    <label class = "full"></label>
+                                                    <% else %>
+                                                    <label class="half"></label>
+                                                  <% end %>
+                                            <% end %>
+                                        </fieldset>
+    							    </div>
+    							    <div class="col-md-2" style="margin-top: 18px; padding-left: 10px;padding-bottom: 0px;">
+    							        <label style="padding-top:2px; padding-left:1px;">&nbsp;&nbsp;<%= temp.score_overall / 2 %>점</label>
+    							    </div>
+    							</div>
+        						<hr_custom><br>
+        						
+    							<div class="br-wrapper br-theme-bars-square-show1">   
+    							    <div class="br-widget">
+    							        <div class="row">
+    							           <div class="col-md-2"><label>난이도</label></div>
+    							           
+    							           <div class="col-md-8" style="padding-left:5px; padding-right:0px;">
+        							           <% 1.upto(temp.score_difficulty) do %>
+            							           <a href="#" class="br-selected br-current"></a>
+            							       <% end %>
+            							       <% 1.upto(5 - temp.score_difficulty) do %>
+            							           <a href="#"></a>
+            							       <% end %>
+        							       </div>
+        							       <div class="col-md-2" style="margin-bottom: 0px;padding-left: 20px;padding-bottom: 0px;bottom: 1px;"><label><%= temp.score_difficulty %>점</label></div>
+        							    </div>
+    							    </div>
+    							 </div>
+    							 <br>
+    							 
+    							 <div class="br-wrapper br-theme-bars-square-show2">
+    							    <div class="br-widget">
+    							        <div class="row">
+    							           <div class="col-md-2"><label>학점</label></div>
+    							           
+    							           <div class="col-md-8" style="padding-left:5px; padding-right:0px;">
+        							           <% 1.upto(temp.score_grade) do %>
+            							           <a href="#" class="br-selected br-current"></a>
+            							       <% end %>
+            							       <% 1.upto(5 - temp.score_grade) do %>
+            							           <a href="#"></a>
+            							       <% end %>
+        							       </div>
+        							       <div class="col-md-2" style="margin-bottom: 0px;padding-left: 20px;padding-bottom: 0px;bottom: 1px;"><label><%= temp.score_grade %>점</label></div>
+        							    </div>
+    							    </div>
+    							 </div>
+    							 <br>
+    							 
+    							 <div class="br-wrapper br-theme-bars-square-show3">
+    							    <div class="br-widget">
+    							        <div class="row">
+    							           <div class="col-md-2"><label>학습량</label></div>
+    							           
+    							           <div class="col-md-8" style="padding-left:5px; padding-right:0px;">
+        							           <% 1.upto(temp.score_study) do %>
+            							           <a href="#" class="br-selected br-current"></a>
+            							       <% end %>
+            							       <% 1.upto(5 - temp.score_study) do %>
+            							           <a href="#"></a>
+            							       <% end %>
+        							       </div>
+        							       <div class="col-md-2" style="margin-bottom: 0px;padding-left: 20px;padding-bottom: 0px;bottom: 1px;"><label><%= temp.score_study %>점</label></div>
+        							    </div>
+    							    </div>
+    							 </div>
+    							 <br>
+    							 
+    							 <div class="br-wrapper br-theme-bars-square-show4">
+    							    <div class="br-widget">
+    							        <div class="row">
+    							           <div class="col-md-2"><label>성취감</label></div>
+    							           
+    							           <div class="col-md-8" style="padding-left:5px; padding-right:0px;">
+        							           <% 1.upto(temp.score_achievement) do %>
+            							           <a href="#" class="br-selected br-current"></a>
+            							       <% end %>
+            							       <% 1.upto(5 - temp.score_achievement) do %>
+            							           <a href="#"></a>
+            							       <% end %>
+        							       </div>
+        							       <div class="col-md-2" style="margin-bottom: 0px;padding-left: 20px;padding-bottom: 0px;bottom: 1px;"><label><%= temp.score_achievement %>점</label></div>
+        							    </div>
+    							    </div>
+    							 </div>
+    							 <br>
+    							 
+    							 <div class="br-wrapper br-theme-bars-square-show5">
+    							    <div class="br-widget">
+    							        <div class="row">
+    							           <div class="col-md-2"><label>출첵</label></div>
+    							           
+    							           <div class="col-md-8" style="padding-left:5px; padding-right:0px;">
+        							           <% 1.upto(temp.score_attendance) do %>
+            							           <a href="#" class="br-selected br-current"></a>
+            							       <% end %>
+            							       <% 1.upto(5 - temp.score_attendance) do %>
+            							           <a href="#"></a>
+            							       <% end %>
+        							       </div>
+        							       <div class="col-md-2" style="margin-bottom: 0px;padding-left: 20px;padding-bottom: 0px;bottom: 1px;"><label><%= temp.score_attendance %>점</label></div>
+        							    </div>
+    							    </div>
+    							 </div>	
+							 </div> 
+                        </section>
+                    </div>
+                </div>
+                <% if flag != 1 %>
+                     <p style="text-align:justify"><%= content2 %></p> <br><br>
+                <% end %>
+            </section_block>
+            <br>
+        <% end %>
+    <% end %>
+    <section_button>
+        <div class="myinfo_buttons" style="margin:10px 0px 10px 140px;">
+            <input type="button" id="move_to_main" style="margin-left:175px;" value="메인가기">
+        </div>
+    </section_button>
+</div>
+
+
+<input type="hidden" id="check_authentication" value="<%= current_user.authentication %>">
+<input type="hidden" id="check_num_myeval" value="<%= current_user.num_myeval %>">
+</body>
+
+
+<script>
+    $(function() {
+        new app2.Subjects;
+
+    });  
+
+    $('#check_search').click(function(){
+        var value1 = $( '#check_authentication' ).val();
+        var value2 = $( '#check_num_myeval' ).val(); 
+        
+        var check_num1  = parseInt( value1 );
+        var check_num2 = parseInt( value2 );  
+    
+        if( check_num1 == 0 || check_num1 == 1 ){
+            alert( "성균인 인증을 해주세요" );
+            return false;
+        }
+        else if( check_num2 < 3 ){
+            alert( "강의평가를 3개 이상 작성해주세요" );
+            return false;
+        }
+        else{
+            location.href = "/system/finding_test_result";
+            return true;
+        }
+    });
+    
+    $('#move_to_mypage').click(function(){
+        location.href = "/system/myinfo_eval"
+    });
+  
+    $('#move_to_evalutation').click(function(){
+        location.href = "/system/lecture_evaluate"
+    });
+    
+    $('#move_to_main').click(function(){
+        location.href = "/main/main"
+    });
+    
+    $('#myModal').on('shown.bs.modal', function () {
+      $('#modify_username').focus()
+    });
+      
+    $('#qqq').click(function(){
+        alert("정보 수정이 완료되었습니다");
+        location.href = "/system/myinfo_modify_process";
+    });
+</script>

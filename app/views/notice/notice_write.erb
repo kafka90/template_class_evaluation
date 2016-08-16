@@ -1,0 +1,60 @@
+<%= render :partial => "/main/navbar" %>
+
+<body style="background-color:#1E2626">
+<div class="container">
+    <div class="col-md-12" style="height:auto; text-align:center; border-top: 2px solid #b7b7b7; border-bottom: 1px solid #b7b7b7; background-color: #D1E1C4; margin:100px 0px 0px 0px;"> 
+        <div style="padding: 27px 0px 30px 0px;">
+          <span style="font-weight: 800; color:#727272; font-size: 120%;">공지게시판 |</span> 
+          <span style="font-weight: 500;color:#a6a6a6; font-size: 120%;">&nbsp;OOO의 공지 및 일정을 확인하세요</span>
+        </div>
+    </div>
+    
+    <% if user_signed_in? %>
+        <!-- <div class="col-md-8 col-md-offset-2 col-sm-12 co-xs-12"> -->
+             <%= render :partial =>"main/aside2"%> 
+        
+            <div class="form-style-10" style="padding: 45px 0px 45px 0px;">
+                <form action="/notice/notice_write_action" method="POST" enctype="multipart/form-data" name="write_form" onsubmit="return overTag()">
+                   
+                    <div class="section" style="padding-left: 30px; color: #299676; font-size: 150%;">공지게시판 작성</div>
+                    <div class="inner-wrap">
+                        <label>제목 <input type="text" name="n_title" placeholder="글 제목을 입력해 주세요." required/></label>
+                        <label>내용 <textarea rows="20" name="n_contents" style="color:black" required></textarea></label>  
+                    </div>
+                     
+                    <div class="section" style="padding-left: 30px; color: #299676;">비밀번호 입력</div>
+                        <div class="inner-wrap">
+                        <label>비밀번호<input type="password" name="n_password" /></label>
+                    </div>
+                      
+                    <div class="button-section" style="height: 50px;">
+                   
+                        <div style = "text-align:center; margin-top:30px;"><input type="submit" value="작성하기"/></div>
+                    <br><br><br>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <% end %>    
+</body>        
+
+
+
+
+
+<!--
+    <!% if user_signed_in? %>
+        <form action="/notice/notice_write_action" method="POST" enctype="multipart/form-data" name="write_form" onsubmit="return overTag()">
+              <label>제목 <input type="text" name="n_title" placeholder="글 제목을 입력해 주세요." required/></label>
+              <label>내용 <textarea rows="20" name="n_contents" style="color:black" required></textarea></label>  
+              <label>비밀번호<input type="password" name="n_password" /></label>
+              <input type="submit" value="작성하기"/>
+        </form>
+      
+    
+          <!% else %>
+                
+    <!% end %>    
+-->
+
+

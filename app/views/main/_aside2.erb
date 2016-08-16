@@ -1,0 +1,139 @@
+<% if current_user.authentication == 0 or current_user.authentication == 1 %>
+    <aside style="margin-top:20px;">
+        <div class="myinfo_buttons3">
+            <h3>
+                &nbsp;&nbsp;<%= current_user.name %>
+               <!-- <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" value="수정">-->
+            </h3>
+        </div>
+        
+        <h5>&nbsp;&nbsp;&nbsp;학번 : <%= current_user.std_num %></h5>
+        <h5>&nbsp;&nbsp;&nbsp;학교인증여부 : 성균인 인증을 해주세요</h5>
+        <br>
+        <div class="myinfo_buttons" style="margin-left:5%;">
+            <a href = "/system/authenticate">
+                <input type="button" value="성균인 인증"> 
+            </a>
+        </div>
+       
+    </aside>
+        
+<% elsif current_user.authentication == 3 %>
+    <aside style="margin-top:20px;">
+        <div class="myinfo_buttons3">
+            <h3>
+                &nbsp;&nbsp;<%= current_user.name %>
+                <!-- <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" value="수정"> -->
+            </h3>
+        </div>
+        <h5>&nbsp;&nbsp;&nbsp;학번 : <%= current_user.std_num %></h5>
+        <h5>&nbsp;&nbsp;&nbsp;학교인증여부 : 관리자</h5>
+        <h5>&nbsp;&nbsp;&nbsp;작성한 강평 개수 : <%= current_user.num_myeval %></h5>
+        <br>
+        <div class="myinfo_buttons" style="margin-left:5%;">
+            <input type="button" id="move_to_evalutation" value="강의평가 작성"> 
+        </div>
+        <br>
+        <div class="myinfo_buttons2" style="margin-left:5%;">
+            <input type="button" id="move_to_mypage" value="나의 강의평가"> 
+        </div>
+        <div style="margin-top: 40px; margin-bottom: 40px">
+            <script src='//uchat.co.kr/uchat.php' charset='UTF-8'></script>
+            <style>
+            a.setting_icon {display: none;}
+            a.uchat_s_logo {visibility: hidden;}
+            </style>
+            
+            <script type='text/javascript'>
+                    
+                u_chat({
+                    room:'skku1'
+                    , skin:'1'
+                    , chat_record:true
+                    , no_inout:true
+                    , width:'255'
+                    , height:'400'
+                    , mb_list_height:'50'
+                    , nick:'<%=current_user.name%>'
+                    , no_indi: true
+                });
+         
+            </script>   
+        </div>
+    </aside>    
+        
+<% else %>
+    <aside style="margin-top:20px;">
+        <div class="myinfo_buttons3">
+            <h3>
+                &nbsp;&nbsp;<%= current_user.name %>
+                <!-- <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" value="수정"> -->
+            </h3>
+        </div>
+        <h5>&nbsp;&nbsp;&nbsp;학번 : <%= current_user.std_num %></h5>
+        <h5>&nbsp;&nbsp;&nbsp;학교인증여부 : 성균인 인증완료</h5>
+        <h5>&nbsp;&nbsp;&nbsp;작성한 강평 개수 : <%= current_user.num_myeval %></h5>
+        <br>
+        <div class="myinfo_buttons" style="margin-left:5%;">
+            <input type="button" id="move_to_evalutation" value="강의평가 작성"> 
+        </div>        
+        <br>        
+        <div class="myinfo_buttons2" style="margin-left:5%;">
+            <input type="button" id="move_to_mypage" value="나의 강의평가"> 
+        </div>
+          <div style="margin-top: 40px; margin-bottom: 40px">
+            <script src='//uchat.co.kr/uchat.php' charset='UTF-8'></script>
+            <style>
+            a.setting_icon {display: none;}
+            a.uchat_s_logo {visibility: hidden;}
+            </style>
+            
+            <script type='text/javascript'>
+                    
+                u_chat({
+                    room:'skku1'
+                    , skin:'1'
+                    , chat_record:true
+                    , no_inout:true
+                    , width:'255'
+                    , height:'400'
+                    , mb_list_height:'50'
+                    , nick:'<%=current_user.name%>'
+                    , no_indi: true
+                });
+                     
+            </script>   
+        </div>
+    </aside>
+<% end %>
+
+
+<!--------------------------------닉네임 수정 modal 시작 ------------------------------>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">닉네임 수정</h4>
+            </div>
+       
+            <%= form_tag("/system/myinfo_modify_process", method: "post") do %>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="username" class="control-label">변경할 닉네임을 적어주세요</label>
+                        <input type="text" name="modify_username" maxlength="6" placeholder="최대 6자" class="form-control">
+                    </div>
+                </div>
+                    
+                <div class="modal-footer">
+                    <button type="submit" id="qqq" class="btn btn-primary">변경</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+                </div>
+            <% end %>          
+        </div>
+    </div>
+</div>
+
+<!--------------------------------닉네임 수정 modal 끝 ------------------------------>
+  

@@ -1,0 +1,138 @@
+<%= render :partial => "/main/navbar" %>
+
+<body style="background-color:#e3e5e4">
+    <div class = "container">
+        <div class="col-md-12" style="height:auto; text-align:center; border-top: 2px solid #b7b7b7; border-bottom: 1px solid #b7b7b7; background-color: #e3e5e4; margin:110px 0px 0px 0px;"> 
+            <div style="padding: 27px 0px 30px 0px;">
+              <span style="font-weight: 800; color:#727272; font-size: 120%;">Contact |</span> 
+              <span style="font-weight: 500;color:#a6a6a6; font-size: 120%;">&nbsp;건의 및 문의사항을 보내주세요</span>
+            </div>
+        </div>
+
+        <%= render :partial =>"main/aside2"%> 
+
+        <% if user_signed_in? %>
+        
+            <section class ="form-style-10" style="margin-top:20px; margin-bottom:25px; padding-left:0px; padding-right:0px">
+                <form action="/system/send_contact_mail" method="POST" enctype="multipart/form-data" name="write_contact">
+                    <div class="section" style="padding-left: 40px; color: #000; font-size: 150%;margin-top: -12px;margin-bottom: 15px;">Contact</div> 
+                    <div class="inner-wrap" style="border-radius:0px;">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>보내는 사람<input type="text" name="c_user" value="<%=current_user.name%>" required/></label>
+                            </div>
+                            <div class="col-md-8">
+                                <label>이메일<input type="text" name="c_mail" id="c_mail" placeholder="입력하신 이메일로 회신드립니다." required/></label>
+                            </div>
+                        </div>    
+                        <label>제목 <input type="text" name="c_title" id="c_title" placeholder="제목을 입력해 주세요." required/></label>
+                        <label>내용 <textarea rows="23" name="c_content" id="c_content" style="color:black" placeholder="내용을 입력해 주세요." required></textarea></label>  
+                    </div>
+                
+                    <div class="button-section" style="height: 50px;">
+                        <div style = "text-align:center; margin-top:20px;padding-top: 11px;"><input type="submit" id="send_contact" value="작성완료"></div>
+                    </div>
+                </form>
+            </section>
+        <% end %>
+        
+        <% unless current_user.authentication == 0 %>
+            <section class ="form-style-10" style="margin-top:0px; padding-left:0px; padding-right:0px"> 
+                <div class="section" style="padding-left: 40px; color: #000; font-size: 150%;margin-top: -12px;margin-bottom: 15px;">나의 신고/문의 내역</div> 
+                <div class="inner-wrap" style="border-radius:0px;">                      
+                    <div class="row" style="border-bottom: 1px #b5b5b5 solid; text-align: center; padding: 0px 10px 15px 0px;">        
+                        <div class="col-md-3 col-xs-3 col-sm-12" style="padding-left: 0px; font-weight: 800; color: #299676;">번호</div>
+                        <div class="col-md-6 col-xs-6 col-sm-12 " style=" word-break: break-all;  text-align: left; padding-left: 0px; word-break: break-all;  font-weight: 800; color: #299676;">제목</div>
+                        <div class="col-md-3 col-xs-3 col-sm-12" style="font-weight: 800; color: #299676;">신고/문의 날짜</div>
+                    </div>
+                    <br>
+                    <% unless( @user_report_list == nil )%>
+                        <% @count = @user_report_list.count %>
+                        <% @user_report_list.reverse.each do |x|%>
+                            <div class="row" id="notice_onclick" style="padding: 0px 10px 0px 0px; margin-top:0px; text-align: center;" onclick="location.href='/system/send_report_detail/<%=x.id%>'">  
+                                <div class="col-md-3 col-xs-3 col-sm-12" style="padding-left: 0px; font-weight: 500; color: #303130;"><%= @count %></div>
+                                <div class="col-md-6 col-xs-6 col-sm-12" style="text-align: left;  padding-left: 0px; font-weight: 500; color: #303130;"><%=x.report_title%></div>
+                                <div class="col-md-3 col-xs-3 col-sm-12" style="font-weight: 500; color: #303130;"><%=x.created_at.in_time_zone("Seoul").strftime("%Y/%m/%d")%></div><br>
+                                <hr style="margin: 15px; width: 97%;">
+                            </div>
+                            <% @count = @count - 1 %>
+                        <% end %>
+                    <% else %>
+                        <div class="row" id="notice_onclick" style="padding: 0px 10px 0px 0px; text-align: center;">  
+                            <div class="col-md-12 col-xs-12 col-sm-12" style="text-align:center;">
+                                <p>신고/문의 내역이 없습니다</p>
+                            </div>
+                            <hr style="margin: 15px;">
+                        </div>
+                    <% end %>
+                </div>
+            </section>
+        <% end %>
+    </div>
+    <input type="hidden" id="check_authentication" value="<%= current_user.authentication %>">
+    <input type="hidden" id="check_num_myeval" value="<%= current_user.num_myeval %>">
+</body>        
+
+<script>
+    $('#check_search').click(function(){
+        var value1 = $( '#check_authentication' ).val();
+        var value2 = $( '#check_num_myeval' ).val(); 
+        
+        var check_num1  = parseInt( value1 );
+        var check_num2 = parseInt( value2 );  
+    
+        if( check_num1 == 0 || check_num1 == 1 ){
+            alert( "성균인 인증을 해주세요." );
+            return false;
+        }
+        else if( check_num2 < 3 ){
+            alert( "강의평가를 3개 이상 작성해주세요." );
+            return false;
+        }
+        else{
+            location.href = "/system/finding_test_result";
+            return true
+        }
+    });
+    
+    $('#move_to_mypage').click(function(){
+        location.href = "/system/myinfo_eval"
+    });
+  
+    $('#move_to_evalutation').click(function(){
+        location.href = "/system/lecture_evaluate"
+    });
+  
+    $('#send_contact').click(function(){
+        var value1 = $( '#c_mail' ).val();
+        var value2 = $( '#c_title' ).val();
+        var value3 = $( '#c_content' ).val();
+        var regExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+        if (regExp.test(value1) != true){ 
+            alert('이메일을 제대로 입력해주세요.');
+            return false;
+        }
+        else if ( value2 == "" ){ 
+            alert('제목을 입력해주세요.');
+            return false;
+        }
+        else if ( value3 == "" ){ 
+            alert('내용을 입력해주세요.');
+            return false;
+        }
+        else{
+            alert( '의견 감사합니다. ' + value1 + ' 로 회신드리겠습니다.' );
+            location.href = "/system/send_contact_mail";  
+        }
+    });
+    
+    $('#myModal').on('shown.bs.modal', function () {
+      $('#modify_username').focus()
+    });
+      
+    $('#qqq').click(function(){
+        alert("정보 수정이 완료되었습니다");
+        location.href = "/system/myinfo_modify_process";
+    });
+</script>
+

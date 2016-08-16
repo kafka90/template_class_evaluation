@@ -1,0 +1,42 @@
+<form action="/system/myinfo_modify_process" name="myinfo">
+    <label>닉네임 수정 <input type="text" name= "modify_username" maxlength="6" placeholder="최대 6자"></label>
+    <br>
+    <label>추후 가능하면 프로필사진 변경 추가</label> 
+    <br>
+    <input type="submit" id="qqq" value="수정">
+    <a href="/main/main">
+        <input type="button" value="메인으로">
+    </a>
+</form>
+
+
+
+<input type="hidden" id="check_authentication" value="<%= current_user.authentication %>">
+<input type="hidden" id="check_num_myeval" value="<%= current_user.num_myeval %>">    
+<script>
+    $('#qqq').click(function(){
+        alert("정보 수정이 완료되었습니다");
+        location.href = "/system/myinfo_modify_process";
+    });
+
+    $('#check_search').click(function(){
+        var value1 = $( '#check_authentication' ).val();
+        var value2 = $( '#check_num_myeval' ).val(); 
+        
+        var check_num1  = parseInt( value1 );
+        var check_num2 = parseInt( value2 );  
+    
+        if( check_num1 == 0 || check_num1 == 1 ){
+            alert( "성균인 인증을 해주세요" );
+            return false;
+        }
+        else if( check_num2 < 3 ){
+            alert( "강의평가를 3개 이상 작성해주세요" );
+            return false;
+        }
+        else{
+            location.href = "/system/finding_test_result";
+            return true;
+        }
+    });
+</script>        

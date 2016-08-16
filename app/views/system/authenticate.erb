@@ -1,0 +1,85 @@
+<%= render :partial => "/main/navbar" %>
+
+<body style="background-color:#e3e5e4">
+
+<div class="col-md-12" style="height:auto; text-align:center; border-top: 2px solid #b7b7b7; border-bottom: 1px solid #b7b7b7; background-color: #e3e5e4; margin:100px 0px 0px 0px;"> 
+    <div style="padding: 27px 0px 30px 0px;">
+      <span style="font-weight: 800; color:#727272; font-size: 120%;">성균인 인증 |</span> 
+      <span style="font-weight: 500;color:#a6a6a6; font-size: 120%;">&nbsp;SKK:LAB의 더 많은 서비스를 이용하실 수 있습니다</span>
+    </div>
+</div>
+
+<div class="container">
+    <div class="form-style-11" style="padding: 45px 0px 45px 0px; background-color:#24a3a3;">
+        <div class="section" style="padding-left: 40px; color: #000; font-size: 150%;margin-top: -12px;margin-bottom: 15px;"> 성균인 인증</div>  
+        <div class="inner-wrap">
+            <br>
+            <h5><%= current_user.name %> 님의 성균관대학교 메일주소는 "<%= current_user.email %>" 입니다.</h5>
+            <div class="small">
+                <h5>
+                    <%= current_user.email %>로 성균인 인증 메일을 보내시겠습니까?&nbsp;&nbsp;
+                    <input type="button" id="kkk" value="전송하기">
+                </h5>
+            </div>
+            <br><hr><br>
+            <h5>메일로 전송된 인증코드를 입력해주세요</h5><br>
+            <% if current_user.authentication == 0 %>    
+                <form action = "/system/test_confirm" method="POST">
+                    <div class="row">
+                        <div class="col-md-10" style="padding-right:0px;">
+                            <input type="text" name="rrr" id="rrr" placeholder="인증코드 입력">
+                        </div>
+                        <div class="col-md-2" style="padding-left:0px;">
+                            <input type="submit" name"zzz" id="zzz" value="입력확인">
+                        </div>
+                    </div>
+                </form>
+                <br><br>
+            <% else %>
+                인증 실패 : 인증코드를 정확하게 입력해주세요 <!-- 인증실패횟수 카운트해서 찍고싶음 / 나중엔 실패횟수 찍을 수 있게 -->
+                <form action = "/system/test_confirm" method="POST">
+                    <input type="text" name="rrr" id="rrr" width="200px" placeholder="인증코드">
+                    <input type="submit" name"zzz" id="zzz" value="확인">
+                </form>
+            <% end %>
+        </div>
+        <div style="padding-top:20px;"></div>
+        <!--
+        <a href="/main/main">
+            <input type="button" value="메인으로" style="margin-left:500px;">
+        </a>
+        -->
+    </div>
+</div>
+<input type="hidden" id="check_authentication" value="<%= current_user.authentication %>">
+<input type="hidden" id="check_num_myeval" value="<%= current_user.num_myeval %>">
+</body>
+
+<script>
+    $('#kkk').click(function(){
+        alert("메일이 전송되었습니다");
+        location.href = "/system/send_mail";
+    });
+
+    $('#check_search').click(function(){
+        var value1 = $( '#check_authentication' ).val();
+        var value2 = $( '#check_num_myeval' ).val(); 
+        
+        var check_num1  = parseInt( value1 );
+        var check_num2 = parseInt( value2 );  
+    
+        if( check_num1 == 0 || check_num1 == 1 ){
+            alert( "성균인 인증을 해주세요" );
+            return false;
+        }
+        else if( check_num2 < 3 ){
+            alert( "강의평가를 3개 이상 작성해주세요" );
+            return false;
+        }
+        else{
+            location.href = "/system/finding_test_result";
+            return true;
+        }
+      });
+</script>
+

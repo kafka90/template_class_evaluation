@@ -1,0 +1,92 @@
+/*http://codepen.io/jamesbarnett/pen/vlpkh*/
+@import url(//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css);
+
+fieldset, label { margin: 0; padding: 0; }
+body{ margin: 20px; }
+h1 { font-size: 1.5em; margin: 10px; }
+
+/****** Style Star Rating Widget *****/
+
+.rating2 { 
+  border: none;
+  float: left;
+  margin-right: -10px;
+}
+
+.rating2 > input { display: none; } 
+.rating2 > label:before { 
+  margin: 8.3px;
+  font-size: 3rem;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005";
+}
+
+.rating2 > .half:before { 
+  content: "\f089";
+  position: absolute;
+}
+
+.rating2 > label { 
+  color: #fdfdfd; 
+ float: right; 
+}
+
+/***** CSS Magic to Highlight Stars on Hover *****/
+.on { color: #FFD700 !important;}
+.on ~ label { color: #FFD700 !important;}
+.small2 { font-size: 1.0em !important;}
+
+
+
+/*---------------------------------------------------*/
+
+.rating3 { 
+  border: none;
+  float: left;
+}
+
+.rating3 > input { display: none; } 
+.rating3 > label:before { 
+  margin: 1.5px;
+  font-size: 3rem;
+  -ms-font-size: 0.5em;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005";
+}
+
+.rating3 > .half:before { 
+  content: "\f089";
+  position: absolute;
+}
+
+.rating3 > label { 
+  color: #f0f0f0; 
+ float: right; 
+}
+
+/*-------------------------------------*/
+.rating4 { 
+  border: none;
+  float: left;
+}
+
+.rating4 > input { display: none; } 
+.rating4 > label:before { 
+  margin: 7px;
+  font-size: 3rem;
+  font-family: FontAwesome;
+  display: inline-block;
+  content: "\f005";
+}
+
+.rating4 > .half:before { 
+  content: "\f089";
+  position: absolute;
+}
+
+.rating4 > label { 
+  color: #fdfdfd; 
+ float: right; 
+}

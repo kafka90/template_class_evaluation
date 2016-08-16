@@ -1,0 +1,13 @@
+    <% if user_signed_in? %>
+    
+        <form action="/notice/notice_modify_action" method="POST" enctype="multipart/form-data" name="write_form" onsubmit="return overTag()">
+            <input type = "hidden" value = "<%=@this_article.id%>" name= "m_id">
+                <label>제목 <input type="text"  value = "<%=@this_article.notice_title%>" name= "m_title" required/></label>
+                <label>내용 <textarea rows="20" name="m_contents" required><%=@this_article.notice_article%></textarea></label>  
+                <label>비밀번호<input type="password" name="f_password" /></label>
+                <input type="submit" value="작성하기"/>
+        </form>
+    <% else %>
+        로그인해주세요 
+    <% end %>    
+        

@@ -1,0 +1,23 @@
+<!--
+<h1>평가 데이터 확인</h1>
+<br>
+강의명 : <!%= @new_evaluation.lecture_name %><br>
+총점 : <!%= @new_evaluation.score_overall %><br>
+강의난이도 : <!%= @new_evaluation.score_difficulty %> <br>
+학점만족도 : <!%= @new_evaluation.score_grade %><br>
+학습량 : <!%= @new_evaluation.score_study %><br>
+성취도 : <!%= @new_evaluation.score_achievement %><br>
+출석체크 : <!%= @new_evaluation.score_attendance %><br>
+강의평 : <!%= @new_evaluation.content %><br><br>
+<a href="/main/main">메인가기</a>
+-->
+<input type="hidden" id="fail" value="<%=@fail%>">
+<script>
+$(function(){
+var check_fail = $( '#fail' ).val();
+    if( check_fail == "1" ){
+            alert( "이미 강의평가를 작성하신 강의입니다" );
+            location.replace('/system/lecture_evaluate');
+    }
+});
+</script>

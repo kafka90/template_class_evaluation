@@ -1,0 +1,595 @@
+<%= render :partial => "/main/navbar" %>
+<body style="background-color:#e3e5e4">
+<div class="container">
+    <div class="col-md-12" style="height:auto; text-align:center; border-top: 2px solid #b7b7b7; border-bottom: 1px solid #b7b7b7; background-color: #e3e5e4; margin:110px 0px 0px 0px;"> 
+        <div style="padding: 27px 0px 30px 0px;">
+          <span style="font-weight: 800; color:#727272; font-size: 120%;">검색결과 |</span>
+          <span style="font-weight: 500;color:#a6a6a6; font-size: 120%;">&nbsp;총 <%=@totalresult%>개의 결과</span>
+        </div>
+    </div>      
+    <%= render :partial => "/main/aside2" %>
+
+<% if @result_amount != 0 %>
+    <section class ="form-style-10" style="margin-top:20px; padding-left:0px; padding-right:0px">
+    <!--<div class="form-style-10 notice">      -->
+    <div class="section" style="padding-left: 40px; color: #000; font-size: 150%; margin-top: -12px;margin-bottom: 15px;">" <%=@term%> "&nbsp;&nbsp;검색결과</div>  
+        <div class="inner-wrap" style="border-radius:0px">
+            <div class="row" style="border-bottom: 1px #b5b5b5 solid; text-align: center; padding: 0px 10px 15px 0px;">        
+                <div class="col-md-2 col-xs-2 col-sm-12" style="padding-right:0px; padding-left: 0px; font-weight: 800; color: #299676;">학수번호</div>
+                <div class="col-md-1 col-xs-1 col-sm-12" style="padding-right:0px; padding-left: 0px; font-weight: 800; color: #299676;">분류</div>
+                <div class="col-md-2 col-xs-3 col-sm-12 " style="padding-right:0px; padding-left: 0px; word-break: break-all;  font-weight: 800; color: #299676;">강의명</div>
+                <div class="col-md-2 col-xs-1 col-sm-12" style="padding-right:0px; padding-left: 0px; font-weight: 800; color: #299676;">교수</div>
+                <div class="col-md-4 col-xs-4 col-sm-12" style="font-weight: 800; color: #299676;">총점 평균 (강의평가 개수)</div>
+                <div class="col-md-1 col-xs-1 col-sm-12" style="padding-right:0px; padding-left: 0px; font-weight: 800; color: #299676;">평가</div>
+            </div>
+            <br>    
+    		
+    	    <% @results.each do |j|%>
+    	        <%@eval = Evaluation.where(subject_id: j.id)%>
+    	        <%@eval_check = @eval.where(evaluation_writer_id: current_user.id) %>
+    	      	        
+                <%sum_score=0%>
+                <%@avg_score=0%>
+            
+                <%@eval.each do |x|%>
+                    <% sum_score+=x.score_overall %>
+                <%end%>
+                
+               
+                    <% @grid_size1 = 2 %>
+                    <% @grid_size2 = 2 %> 
+             
+          
+                <% if @eval.count != 0 %>
+                    <%@avg_score=sum_score.to_d/@eval.count.to_d %>
+            	    <div class="row" id="notice_onclick" style="  padding: 0px 10px 0px 0px; text-align: center;">  
+                        <div id="move_to_lectureinfo" onclick="location.href='/system/lecture_info/<%=j.id%>'">
+                        <!-- <a href = "/system/lecture_info/<!%= j.id %>"> -->
+                            <div class="col-md-2 col-xs-2 col-sm-12" style="padding-right:0px; padding-left: 0px; padding-top:5px; font-weight: 500; color: #303130;"><%=j.code%></div>
+                            <div class="col-md-1 col-xs-1 col-sm-12" style="padding-right:0px; padding-left: 0px; padding-top:5px; font-weight: 500; color: #303130;"><%=j.division%></div>
+                            <div class="col-md-<%=@grid_size1%> col-xs-<%=@grid_size1%> col-sm-12" style="padding-right:0px; padding-left: 0px; padding-top:5px; font-weight: 500; color: #303130;"><%=j.name%></div>
+                            
+                            <div class="col-md-<%=@grid_size2%> col-xs-<%=@grid_size2%> col-sm-12" style="padding-right:0px; padding-left: 0px; padding-top:5px; font-weight: 500; color: #303130;"><%=j.prof%></div>
+                        
+                            <div class="col-md-4 col-xs-4 col-sm-12" style="font-weight: 500; color: #303130;">
+                                <fieldset class="rating3">
+        							<% 10.downto(1) do |i| %>
+        								<% if (i == @avg_score.round(0) and i %2 == 0) %>
+        									<label class ="full on small2"></label>
+        								<% elsif (i == @avg_score.round(0) and i %2 != 0) %>
+        									<label class="half on small2"></label>
+        								<% elsif i % 2 == 0%>
+        									<label class = "full small2"></label>
+        								<% else %>
+        									<label class="half small2"></label>
+        								<% end %>
+        							<% end %>	
+    					    	</fieldset>
+    					        <p style="padding-top:5px;">&nbsp;&nbsp;<%=(j.avg_score_overall / 2).round(1)%>점 (<%=j.evaluations.count%>개)<p>
+                            </div> 
+                        </div>
+                                            
+                        <% if @eval_check.count == 0 %>
+                            <div class="col-md-1 col-xs-1 col-sm-12" style="padding-right:0px; padding-left: 0px; font-weight: 500; color: #303130;">
+                                <button type='button' style="margin-top:3px; padding-left:3px; padding-right:3px;" onclick="location.href='/system/lecture_evaluate/<%=j.id%>'">평가하기</button>
+                            </div>
+                        <% else %>
+                            <div class="col-md-1 col-xs-1 col-sm-12" style="padding-right:0px; padding-left: 0px; font-weight: 500; color: #303130;">
+                                <p style="color:red; margin-top:4px;">평가완료</p>
+                            </div>
+                        <% end %>
+                        
+                        <br>
+                        <hr style="margin: 15px; width: 100%;">
+                    </div>
+                <% else %>    
+                    <div class="row" id="notice_onclick" style="  padding: 0px 10px 0px 0px; text-align: center;">  
+                        <div id="donot_move_to_lectureinfo<%=@result_count%>">
+                        <!-- <a href = "/system/lecture_info/<!%= j.id %>"> -->
+                            <div class="col-md-2 col-xs-2 col-sm-12" style="padding-right:0px; padding-left: 0px; padding-top:5px; font-weight: 500; color: #303130;"><%=j.code%></div>
+                            <div class="col-md-1 col-xs-1 col-sm-12" style="padding-right:0px; padding-left: 0px; padding-top:5px; font-weight: 500; color: #303130;"><%=j.division%></div>
+                            <div class="col-md-<%=@grid_size1%> col-xs-<%=@grid_size1%> col-sm-12" style="padding-right:0px; padding-left: 0px; padding-top:5px; font-weight: 500; color: #303130;"><%=j.name%></div>
+                            <div class="col-md-<%=@grid_size2%> col-xs-<%=@grid_size2%> col-sm-12" style="padding-right:0px; padding-left: 0px; padding-top:5px; font-weight: 500; color: #303130;"><%=j.prof%></div>
+                          
+                            <div class="col-md-4 col-xs-4 col-sm-12" style="font-weight: 500; color: #303130;">
+                                <fieldset class="rating3">
+        							<% 10.downto(1) do |i| %>
+        								<% if (i == @avg_score.round(0) and i %2 == 0) %>
+        									<label class ="full on small2"></label>
+        								<% elsif (i == @avg_score.round(0) and i %2 != 0) %>
+        									<label class="half on small2"></label>
+        								<% elsif i % 2 == 0%>
+        									<label class = "full small2"></label>
+        								<% else %>
+        									<label class="half small2"></label>
+        								<% end %>
+        							<% end %>	
+    					    	</fieldset>
+    					        <p style="padding-top:5px;">&nbsp;&nbsp;<%=(j.avg_score_overall / 2).round(1)%>점 (<%=j.evaluations.count%>개)<p>
+                            </div> 
+                        </div>
+                                            
+                        <% if @eval_check.count == 0 %>
+                            <div class="col-md-1 col-xs-1 col-sm-12" style="padding-right:0px; padding-left: 0px; font-weight: 500; color: #303130;">
+                                <button type='button' style="margin-top:3px; padding-left:3px; padding-right:3px;" onclick="location.href='/system/lecture_evaluate/<%=j.id%>'">평가하기</button>
+                            </div>
+                        <% else %>
+                            <div class="col-md-1 col-xs-1 col-sm-12" style="padding-right:0px; padding-left: 0px; font-weight: 500; color: #303130;">
+                                <p style="color:red; margin-top:4px;">평가완료</p>
+                            </div>
+                        <% end %>
+                        
+                        <br>
+                        <hr style="margin: 15px;    width: 100%;">
+                    </div>
+                    <%@result_count = @result_count + 1%>
+                <% end %>    
+            <% end %>
+            
+<!-----------페이지네이션------------->               
+            <div style="text-align: center;">
+                <% @totalpage = @totalpagelist[@current_page3-1..@current_page3+8] %> 
+                <% if @current_page2 > 10 %>
+                    <span id="notice_onclick" onclick="location.href='/system/finding_test_result?searching=<%=@term%>&current_page=<%=@current_page3-1%>'"><</span>
+                <% end%>
+                
+                <% @totalpage.each do |page| %>
+                    <span id="notice_onclick" onclick="location.href='/system/finding_test_result?searching=<%=@term%>&current_page=<%=page%>'">
+                        <% if page == @current_page.to_i %>
+                            <b>
+                        <% end %>
+                    
+                        <%=page%>
+                    
+                        <% if page == @current_page.to_i %>
+                            </b>
+                        <% end %>
+                    </span>
+                <% end %>
+                
+                <% unless @totalpage.count < 10 %>
+                    <span id="notice_onclick" onclick="location.href='/system/finding_test_result?searching=<%=@term%>&current_page=<%=@current_page3+10%>'">></span>
+                <% end %>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <input type="button" id="move_to_main" value="메인으로"> 
+        </div>
+    </section>
+<%end%>
+
+</div>
+</body>
+
+<script>
+  $(function() {
+   new app2.Subjects;
+  }); 
+
+    $('#move_to_main').click(function(){
+        location.href = "/main/main"
+    });
+    
+    $('#move_to_mypage').click(function(){
+        location.href = "/system/myinfo_eval"
+    });
+  
+    $('#move_to_evalutation').click(function(){
+        location.href = "/system/lecture_evaluate"
+    });
+    
+    $('#donot_move_to_lectureinfo0').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo1').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo2').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo3').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo4').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo5').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo6').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo7').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo8').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo9').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo10').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo11').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo12').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo13').click(function(){
+        alert("등록된 �����의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo14').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo15').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo16').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo17').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo18').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo19').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo20').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo21').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo22').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo23').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo24').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo25').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남���주���요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo26').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo27').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가��� 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo28').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo29').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo30').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo31').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo32').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo33').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo34').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo35').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo36').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo37').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo38').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo39').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo40').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo41').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo42').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo43').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo44').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo45').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo46').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo47').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo48').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo49').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo50').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo51').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo52').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo53').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo54').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo55').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo56').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo57').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo58').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo59').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo60').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo61').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo62').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo63').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo64').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo65').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo66').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo67').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo68').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo69').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo70').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo71').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo72').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo73').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo74').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo75').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo76').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo77').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo78').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo79').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo80').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo81').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo82').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo83').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo84').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo85').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo86').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo87').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo88').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo89').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo90').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo91').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo92').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo93').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo94').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo95').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo96').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo97').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo98').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo99').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    $('#donot_move_to_lectureinfo100').click(function(){
+        alert("등록된 강의평가가 없습니다. 첫 강의평가를 남겨주세요!");
+        return false;
+    });
+    
+    $('#myModal').on('shown.bs.modal', function () {
+      $('#modify_username').focus()
+    });
+      
+    $('#qqq').click(function(){
+        alert("정보 수정이 완료되었습니다");
+        location.href = "/system/myinfo_modify_process";
+    });
+  
+</script>
